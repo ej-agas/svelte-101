@@ -2,7 +2,7 @@
   import Button from './lib/Button.svelte';
 </script>
 
-<Button>Svelte is Awesome</Button>
+<Button size={"large"} shadow>Svelte is Awesome</Button>
 
 <style>
 </style>
