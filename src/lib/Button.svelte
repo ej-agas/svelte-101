@@ -3,6 +3,11 @@
 
     export let shadow: boolean = false
 
+    export let bgColor: string = '';
+
+    export let textColor: string = '';
+
+
     function setButtonSize(): string {
         switch (size) {
             case "small":
@@ -18,13 +23,20 @@
 
 </script>
 
-<button class={setButtonSize()} class:shadow><slot>FALLBACK</slot></button>
+<button
+    class={setButtonSize()}
+    class:shadow
+    style:--buttonBackgroundColor={bgColor}
+    style:--buttonTextColor={textColor}
+    >
+    <slot>FALLBACK</slot>
+</button>
 
 <style lang="scss">
     button {
         border: none;
-        background-color: variables.$buttonColor;
-        color: variables.$buttonTextColor;
+        background-color: var(--buttonBackgroundColor);
+        color: var(--buttonTextColor);
         font-weight: bold;
         border-radius: 5px;
         cursor: pointer;
