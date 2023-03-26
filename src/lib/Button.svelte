@@ -7,6 +7,8 @@
 
     export let textColor: string = '';
 
+    let isHovered: boolean = false;
+
 
     function setButtonSize(): string {
         switch (size) {
@@ -20,7 +22,6 @@
                 return "size-sm";
         }
     }
-    console.log($$slots)
 </script>
 
 <button
@@ -30,12 +31,16 @@
     style:--buttonTextColor={textColor}
     >
     {#if $$slots.leftContent}
-        <div class="left-content">
-            <slot name="leftContent"></slot>
+        <div
+            class="left-content"
+            on:mouseenter={() => isHovered = true}
+            on:mouseleave={() => isHovered = false}
+        >
+            <slot name="leftContent" foo="bar"></slot>
         </div>
     {/if}
 
-    <slot>FALLBACK</slot>
+    <slot {isHovered}>FALLBACK</slot>
 </button>
 
 <style lang="scss">
