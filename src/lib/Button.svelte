@@ -9,9 +9,6 @@
 
     let isHovered: boolean = false;
 
-    console.log($$restProps)
-
-
     function setButtonSize(): string {
         switch (size) {
             case "small":
