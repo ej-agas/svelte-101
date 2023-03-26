@@ -5,9 +5,11 @@
 </script>
 
 <Button
+    on:click|once= {() => alert("Hello World")}
     let:isHovered
     size={"large"}
     shadow
+    disabled
 >
     <div
         style:width="20px"

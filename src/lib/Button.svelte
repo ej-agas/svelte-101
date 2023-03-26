@@ -9,6 +9,8 @@
 
     let isHovered: boolean = false;
 
+    console.log($$restProps)
+
 
     function setButtonSize(): string {
         switch (size) {
@@ -25,11 +27,13 @@
 </script>
 
 <button
+    on:click
     class={setButtonSize()}
     class:shadow
     style:--buttonBackgroundColor={bgColor}
     style:--buttonTextColor={textColor}
-    >
+    {...$$restProps}
+>
     {#if $$slots.leftContent}
         <div
             class="left-content"
@@ -55,6 +59,10 @@
         cursor: pointer;
         .left-content {
             margin-right: 10px;
+        }
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         &:hover {
             background-color: variables.$buttonColorHover;
