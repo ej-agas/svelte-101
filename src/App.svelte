@@ -2,17 +2,24 @@
     import TodoList from "./lib/TodoList.svelte";
     import { v4 as uuid } from "uuid";
     import type { Todo } from "./types";
+  import Button from "./lib/Button.svelte";
+
+    let todoList: TodoList;
+    let showList: boolean = true;
 
     let todos: Map<string, Todo> = new Map();
 
     function addTodo(event: CustomEvent<{ text: string }>) {
-        const id = uuid();
-        todos = new Map(todos)
-        todos = todos.set(id, {
-            id: id,
-            text: event.detail.text,
-            done: false
-        })
+        event.preventDefault()
+        setTimeout(() => {
+            todos = new Map(todos)
+            todos.set(uuid(), {
+                id: uuid(),
+                text: event.detail.text,
+                done: false
+            })
+            todoList.clearInput()
+        }, 500)
     }
 
     function deleteTodo(event: CustomEvent<{ id: string }>) {
@@ -31,14 +38,21 @@
             done: event.detail.done
         })
     }
-
-    $: console.table(todos)
 </script>
 
-<h1>{todos.size} Todos</h1>
-<TodoList
-    {todos}
-    on:addTodo={addTodo}
-    on:deleteTodo={deleteTodo}
-    on:toggleTodo={toggleTodo}
-/>
+<label>
+    <input type="checkbox" bind:checked={showList}/>
+    Show/Hide Todo List
+</label>
+{#if showList}
+    <h1>{todos.size} Todos</h1>
+    <TodoList
+        {todos}
+        bind:this={todoList}
+        on:addTodo={addTodo}
+        on:deleteTodo={deleteTodo}
+        on:toggleTodo={toggleTodo}
+    />
+
+    <Button on:click={() => todoList.focusInput()}>Focus</Button>
+{/if}

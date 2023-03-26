@@ -3,16 +3,36 @@
 <script lang="ts">
     import type { Todo } from "src/types";
     import Button from "./Button.svelte";
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onDestroy, onMount } from "svelte";
+
+    onMount(() => {
+        console.log('mounted')
+
+        return () => console.log('destroyed 2')
+    })
+    onDestroy(() => console.log('destroyed'))
 
     export let todos: Map<string, Todo> = new Map();
+
     let inputText: string = '';
+    let input: HTMLInputElement;
+
+    export function clearInput() {
+        inputText = '';
+    }
+
+    export function focusInput() {
+        input.focus();
+    }
 
     const dispatch = createEventDispatcher();
 
     function addTodo() {
-        dispatch('addTodo', { text: inputText });
-        inputText = '';
+        const isNotCancelled = dispatch('addTodo', { text: inputText }, { cancelable: true });
+
+        if (isNotCancelled) {
+            inputText = '';
+        }
     }
 
     function deleteTodo(id: string) {
@@ -45,7 +65,7 @@
         on:submit|preventDefault={addTodo}
         class="add-todo-form"
     >
-    <input bind:value={inputText}/>
+    <input bind:this={input} bind:value={inputText}/>
     <Button type="submit" disabled={!inputText}>Add</Button>
     </form>
 </div>
