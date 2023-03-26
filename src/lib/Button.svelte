@@ -20,7 +20,7 @@
                 return "size-sm";
         }
     }
-
+    console.log($$slots)
 </script>
 
 <button
@@ -29,17 +29,28 @@
     style:--buttonBackgroundColor={bgColor}
     style:--buttonTextColor={textColor}
     >
+    {#if $$slots.leftContent}
+        <div class="left-content">
+            <slot name="leftContent"></slot>
+        </div>
+    {/if}
+
     <slot>FALLBACK</slot>
 </button>
 
 <style lang="scss">
     button {
+        display: flex;
+        align-items: center;
         border: none;
         background-color: var(--buttonBackgroundColor);
         color: var(--buttonTextColor);
         font-weight: bold;
         border-radius: 5px;
         cursor: pointer;
+        .left-content {
+            margin-right: 10px;
+        }
         &:hover {
             background-color: variables.$buttonColorHover;
         }
