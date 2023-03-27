@@ -7,7 +7,7 @@
 
     afterUpdate(() => {
         if (autoScroll) {
-            listDiv.scrollTop = listDiv.scrollHeight;
+            listDiv.scrollTo(0, listDivOffsetHeight);
         }
         autoScroll = false;
     });
@@ -19,6 +19,7 @@
     let inputText: string = "";
     let input: HTMLInputElement;
     let listDiv: HTMLDivElement;
+    let listDivOffsetHeight: number;
 
     $: {
         autoScroll = todos.size > previousTodos.size;
@@ -58,23 +59,26 @@
 
 <div class="todo-list-wrapper">
     <div class="todo-list" bind:this="{listDiv}">
-        <ul>
-            {#each [...todos] as [key, todo]}
-                <li>
-                    <label for="{todo.id}">
-                        <input
-                            on:input="{() => toggleTodo(todo.id, !todo.done)}"
-                            type="checkbox"
-                            checked="{todo.done}"
-                        />
-                        {todo.text}
-                    </label>
-                    <button on:click="{() => deleteTodo(todo.id)}"
-                        >Delete</button
-                    >
-                </li>
-            {/each}
-        </ul>
+        <div bind:offsetHeight="{listDivOffsetHeight}">
+            <ul>
+                {#each [...todos] as [key, todo]}
+                    <li>
+                        <label for="{todo.id}">
+                            <input
+                                on:input="{() =>
+                                    toggleTodo(todo.id, !todo.done)}"
+                                type="checkbox"
+                                checked="{todo.done}"
+                            />
+                            {todo.text}
+                        </label>
+                        <button on:click="{() => deleteTodo(todo.id)}"
+                            >Delete</button
+                        >
+                    </li>
+                {/each}
+            </ul>
+        </div>
     </div>
     <form on:submit|preventDefault="{addTodo}" class="add-todo-form">
         <input bind:this="{input}" bind:value="{inputText}" />

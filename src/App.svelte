@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { tick } from "svelte";
     import TodoList from "./lib/TodoList.svelte";
     import { v4 as uuid } from "uuid";
     import type { Todo } from "./types";
@@ -9,8 +10,9 @@
 
     let todos: Map<string, Todo> = new Map();
 
-    function addTodo(event: CustomEvent<{ text: string }>) {
+    async function addTodo(event: CustomEvent<{ text: string }>) {
         event.preventDefault();
+        console.log(document.querySelectorAll(".todo-list ul li"));
         todos = new Map(todos);
         const id = uuid();
         todos.set(id, {
@@ -19,6 +21,8 @@
             done: false,
         });
         todoList.clearInput();
+        await tick(); // wait for the DOM to update
+        console.log(document.querySelectorAll(".todo-list ul li"));
     }
 
     function deleteTodo(event: CustomEvent<{ id: string }>) {
