@@ -3,14 +3,8 @@
 <script lang="ts">
     import type { Todo } from "src/types";
     import Button from "./Button.svelte";
-    import { createEventDispatcher, afterUpdate, beforeUpdate } from "svelte";
-
-    afterUpdate(() => {
-        if (autoScroll) {
-            listDiv.scrollTo(0, listDivOffsetHeight);
-        }
-        autoScroll = false;
-    });
+    import { createEventDispatcher, afterUpdate } from "svelte";
+    import FaRegTrashAlt from "svelte-icons/fa/FaRegTrashAlt.svelte";
 
     export let todos: Map<string, Todo> = new Map();
     let previousTodos: Map<string, Todo> = todos;
@@ -20,6 +14,15 @@
     let input: HTMLInputElement;
     let listDiv: HTMLDivElement;
     let listDivOffsetHeight: number;
+
+    const dispatch = createEventDispatcher();
+
+    afterUpdate(() => {
+        if (autoScroll) {
+            listDiv.scrollTo(0, listDivOffsetHeight);
+        }
+        autoScroll = false;
+    });
 
     $: {
         autoScroll = todos.size > previousTodos.size;
@@ -33,8 +36,6 @@
     export function focusInput() {
         input.focus();
     }
-
-    const dispatch = createEventDispatcher();
 
     function addTodo() {
         const isNotCancelled = dispatch(
@@ -60,28 +61,43 @@
 <div class="todo-list-wrapper">
     <div class="todo-list" bind:this="{listDiv}">
         <div bind:offsetHeight="{listDivOffsetHeight}">
-            <ul>
-                {#each [...todos] as [key, todo]}
-                    <li>
-                        <label for="{todo.id}">
-                            <input
-                                on:input="{() =>
-                                    toggleTodo(todo.id, !todo.done)}"
-                                type="checkbox"
-                                checked="{todo.done}"
-                            />
-                            {todo.text}
-                        </label>
-                        <button on:click="{() => deleteTodo(todo.id)}"
-                            >Delete</button
-                        >
-                    </li>
-                {/each}
-            </ul>
+            {#if todos.size === 0}
+                <p>No todos</p>
+            {:else}
+                <ul>
+                    {#each [...todos] as [key, todo]}
+                        <li class="completed">
+                            <label for="{todo.id}">
+                                <input
+                                    on:input="{() =>
+                                        toggleTodo(todo.id, !todo.done)}"
+                                    type="checkbox"
+                                    checked="{todo.done}"
+                                />
+                                {todo.text}
+                            </label>
+                            <button
+                                class="remove-todo-button"
+                                aria-label="Remove Todo: {todo.text}"
+                                on:click="{() => deleteTodo(todo.id)}"
+                                ><span
+                                    style:width="10px"
+                                    style:display="inline-block"
+                                    ><FaRegTrashAlt />
+                                </span>
+                            </button>
+                        </li>
+                    {/each}
+                </ul>
+            {/if}
         </div>
     </div>
     <form on:submit|preventDefault="{addTodo}" class="add-todo-form">
-        <input bind:this="{input}" bind:value="{inputText}" />
+        <input
+            bind:this="{input}"
+            bind:value="{inputText}"
+            placeholder="New Todo"
+        />
         <Button type="submit" disabled="{!inputText}">Add</Button>
     </form>
 </div>

@@ -12,7 +12,6 @@
 
     async function addTodo(event: CustomEvent<{ text: string }>) {
         event.preventDefault();
-        console.log(document.querySelectorAll(".todo-list ul li"));
         todos = new Map(todos);
         const id = uuid();
         todos.set(id, {
@@ -22,7 +21,6 @@
         });
         todoList.clearInput();
         await tick(); // wait for the DOM to update
-        console.log(document.querySelectorAll(".todo-list ul li"));
     }
 
     function deleteTodo(event: CustomEvent<{ id: string }>) {
