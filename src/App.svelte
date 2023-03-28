@@ -56,6 +56,4 @@
         on:deleteTodo="{deleteTodo}"
         on:toggleTodo="{toggleTodo}"
     />
-
-    <Button on:click="{() => todoList.focusInput()}">Focus</Button>
 {/if}
