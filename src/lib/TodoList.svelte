@@ -14,6 +14,7 @@
     let input: HTMLInputElement;
     let listDiv: HTMLDivElement;
     let listDivOffsetHeight: number;
+    export let disableAdding: boolean = false;
 
     const dispatch = createEventDispatcher();
 
@@ -62,7 +63,7 @@
     <div class="todo-list" bind:this="{listDiv}">
         <div bind:offsetHeight="{listDivOffsetHeight}">
             {#if todos.size === 0}
-                <p>No todos</p>
+                <p style:text-align="center">No todos</p>
             {:else}
                 <ul>
                     {#each [...todos] as [key, todo]}
@@ -94,11 +95,14 @@
     </div>
     <form on:submit|preventDefault="{addTodo}" class="add-todo-form">
         <input
+            disabled="{disableAdding}"
             bind:this="{input}"
             bind:value="{inputText}"
             placeholder="New Todo"
         />
-        <Button type="submit" disabled="{!inputText}">Add</Button>
+        <Button type="submit" disabled="{!inputText || disableAdding}"
+            >Add</Button
+        >
     </form>
 </div>
 
