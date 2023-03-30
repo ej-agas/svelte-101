@@ -12,6 +12,7 @@
     let error: string = "";
 
     let todos: Map<string, Todo> = new Map();
+    let disabledTodos: Array<string> = [];
 
     onMount(() => {
         loadTodos();
@@ -81,11 +82,29 @@
         todoList.focusInput();
     }
 
-    function deleteTodo(event: CustomEvent<{ id: string }>) {
+    async function deleteTodo(event: CustomEvent<{ id: string }>) {
+        const id = event.detail.id;
+
+        if (disabledTodos.includes(id)) return;
+        disabledTodos = [...disabledTodos, id];
+
+        const response = await fetch(
+            "https://jsonplaceholder.typicode.com/todos/" + id,
+            {
+                method: "DELETE",
+            }
+        );
+
+        if (!response.ok) {
+            isLoading = false;
+            error = `${response.status} ${response.statusText}`;
+            return;
+        }
+
         todos = new Map(todos);
         todos.delete(event.detail.id);
-        console.log(event.detail.id);
-        console.table(todos);
+
+        disabledTodos = disabledTodos.filter((id) => id !== event.detail.id);
     }
 
     function toggleTodo(event: CustomEvent<{ id: string; done: boolean }>) {
@@ -110,6 +129,7 @@
     <TodoList
         todos="{todos}"
         disableAdding="{isAdding}"
+        deleteInProgress="{deleteInProgress}"
         bind:this="{todoList}"
         on:addTodo="{addTodo}"
         on:deleteTodo="{deleteTodo}"

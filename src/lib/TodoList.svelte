@@ -7,6 +7,7 @@
     import FaRegTrashAlt from "svelte-icons/fa/FaRegTrashAlt.svelte";
 
     export let todos: Map<string, Todo> = new Map();
+    export let deleteInProgress: Array<string> = [];
     let previousTodos: Map<string, Todo> = todos;
     let autoScroll: boolean = false;
 
@@ -70,6 +71,9 @@
                         <li class="{todo.done ? 'completed' : ''}">
                             <label for="{todo.id}">
                                 <input
+                                    disabled="{deleteInProgress.includes(
+                                        todo.id
+                                    )}"
                                     on:input="{() =>
                                         toggleTodo(todo.id, !todo.done)}"
                                     type="checkbox"
@@ -78,6 +82,7 @@
                                 {todo.text}
                             </label>
                             <button
+                                disabled="{deleteInProgress.includes(todo.id)}"
                                 class="remove-todo-button"
                                 aria-label="Remove Todo: {todo.text}"
                                 on:click="{() => deleteTodo(todo.id)}"
@@ -155,6 +160,10 @@
                         display: none;
                         :global(svg) {
                             fill: #bd1414;
+                        }
+                        &:disabled {
+                            opacity: 0.4;
+                            cursor: not-allowed;
                         }
                     }
                     &:hover {
