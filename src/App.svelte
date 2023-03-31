@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "@picocss/pico/css/pico.css";
     import { onMount } from "svelte";
     import Home from "./pages/Home.svelte";
     import Settings from "./pages/Settings.svelte";
@@ -26,16 +27,20 @@
 
 <svelte:window on:hashchange="{onRouteChange}" />
 
-<nav>
-    <a href="#/home">Home</a>
-    <a href="#/settings">Settings</a>
-</nav>
+<div class="container">
+    <nav class="center">
+        <ul>
+            <li><a href="#/home" role="button">Home</a></li>
+            <li><a href="#/settings" role="button">Settings</a></li>
+        </ul>
+    </nav>
 
-{#if page === "home"}
-    <Home />
-{:else if page === "settings"}
-    <Settings />
-{/if}
+    {#if page === "home"}
+        <Home />
+    {:else if page === "settings"}
+        <Settings />
+    {/if}
+</div>
 
 <style>
 </style>

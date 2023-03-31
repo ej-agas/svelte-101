@@ -1,11 +1,11 @@
 <script lang="ts">
     export let size: "small" | "medium" | "large" = "small";
 
-    export let shadow: boolean = false
+    export let shadow: boolean = false;
 
-    export let bgColor: string = '';
+    export let bgColor: string = "";
 
-    export let textColor: string = '';
+    export let textColor: string = "";
 
     let isHovered: boolean = false;
 
@@ -25,23 +25,23 @@
 
 <button
     on:click
-    class={setButtonSize()}
-    class:shadow
-    style:--buttonBackgroundColor={bgColor}
-    style:--buttonTextColor={textColor}
+    class="{setButtonSize()}"
+    class:shadow="{shadow}"
+    style:--buttonBackgroundColor="{bgColor}"
+    style:--buttonTextColor="{textColor}"
     {...$$restProps}
 >
     {#if $$slots.leftContent}
         <div
             class="left-content"
-            on:mouseenter={() => isHovered = true}
-            on:mouseleave={() => isHovered = false}
+            on:mouseenter="{() => (isHovered = true)}"
+            on:mouseleave="{() => (isHovered = false)}"
         >
-            <slot name="leftContent" foo="bar"></slot>
+            <slot name="leftContent" foo="bar" />
         </div>
     {/if}
 
-    <slot {isHovered}>FALLBACK</slot>
+    <slot isHovered="{isHovered}">FALLBACK</slot>
 </button>
 
 <style lang="scss">
