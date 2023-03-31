@@ -1,146 +1,41 @@
 <script lang="ts">
-    import { onMount, tick } from "svelte";
-    import TodoList from "./lib/TodoList.svelte";
-    import { v4 as uuid } from "uuid";
-    import type { Todo } from "./types";
-    import Button from "./lib/Button.svelte";
+    import { onMount } from "svelte";
+    import Home from "./pages/Home.svelte";
+    import Settings from "./pages/Settings.svelte";
 
-    let todoList: TodoList;
+    let page: string;
 
-    let isLoading: boolean = false;
-    let isAdding: boolean = false;
-    let error: string = "";
+    function onRouteChange(): void {
+        const path = window.location.hash.slice(1);
 
-    let todos: Map<string, Todo> = new Map();
-    let disabledTodos: Array<string> = [];
-
-    onMount(() => {
-        loadTodos();
-    });
-
-    async function loadTodos(): Promise<void> {
-        isLoading = true;
-        let response = await fetch(
-            "https://jsonplaceholder.typicode.com/todos?_limit=5"
-        );
-
-        if (!response.ok) {
-            isLoading = false;
-            error = `${response.status} ${response.statusText}`;
+        if (path === "/") {
+            page = "home";
             return;
         }
 
-        const json = await response.json();
-
-        todos = new Map(todos);
-        json.forEach((todo) => {
-            todos.set(todo.id, {
-                id: todo.id,
-                text: todo.title,
-                done: false,
-            });
-        });
-        isLoading = false;
-    }
-
-    async function addTodo(event: CustomEvent<{ text: string }>) {
-        event.preventDefault();
-        isAdding = true;
-        const response = await fetch(
-            "https://jsonplaceholder.typicode.com/todos",
-            {
-                method: "POST",
-                body: JSON.stringify({
-                    text: event.detail.text,
-                    done: false,
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }
-        );
-
-        if (!response.ok) {
-            isLoading = false;
-            isAdding = false;
-            error = `${response.status} ${response.statusText}`;
+        if (path === "/settings") {
+            page = "settings";
             return;
         }
 
-        const todo = await response.json();
-
-        todos = new Map(todos);
-        const id = uuid();
-        todos.set(id, {
-            id: id,
-            text: todo.text,
-            done: todo.done,
-        });
-        todoList.clearInput();
-        isAdding = false;
-        await tick(); // wait for the DOM to update
-        todoList.focusInput();
+        window.location.hash = "/";
     }
 
-    async function deleteTodo(event: CustomEvent<{ id: string }>) {
-        const id = event.detail.id;
-
-        if (disabledTodos.includes(id)) return;
-        disabledTodos = [...disabledTodos, id];
-
-        const response = await fetch(
-            "https://jsonplaceholder.typicode.com/todos/" + id,
-            {
-                method: "DELETE",
-            }
-        );
-
-        if (!response.ok) {
-            isLoading = false;
-            error = `${response.status} ${response.statusText}`;
-            return;
-        }
-
-        todos = new Map(todos);
-        todos.delete(event.detail.id);
-
-        disabledTodos = disabledTodos.filter((id) => id !== event.detail.id);
-    }
-
-    function toggleTodo(event: CustomEvent<{ id: string; done: boolean }>) {
-        todos = new Map(todos);
-        const todo = todos.get(event.detail.id);
-
-        if (!todo) return;
-
-        todos.set(event.detail.id, {
-            ...todo,
-            done: event.detail.done,
-        });
-    }
+    onMount(onRouteChange);
 </script>
 
-{#if isLoading}
-    <p class="state-text">Loading...</p>
-{:else if error}
-    <p class="state-text">{error}</p>
-{:else}
-    <h1 style:text-align="center">Todos</h1>
-    <TodoList
-        todos="{todos}"
-        disableAdding="{isAdding}"
-        deleteInProgress="{deleteInProgress}"
-        bind:this="{todoList}"
-        on:addTodo="{addTodo}"
-        on:deleteTodo="{deleteTodo}"
-        on:toggleTodo="{toggleTodo}"
-    />
+<svelte:window on:hashchange="{onRouteChange}" />
+
+<nav>
+    <a href="#/home">Home</a>
+    <a href="#/settings">Settings</a>
+</nav>
+
+{#if page === "home"}
+    <Home />
+{:else if page === "settings"}
+    <Settings />
 {/if}
 
 <style>
-    .state-text {
-        margin: 0;
-        padding: 15px;
-        text-align: center;
-    }
 </style>
