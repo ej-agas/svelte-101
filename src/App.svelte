@@ -1,6 +1,6 @@
 <script lang="ts">
-    import "@picocss/pico/css/pico.css";
     import { onMount } from "svelte";
+    import Head from "./lib/Head.svelte";
     import Home from "./pages/Home.svelte";
     import Settings from "./pages/Settings.svelte";
 
@@ -24,6 +24,8 @@
 
     onMount(onRouteChange);
 </script>
+
+<Head />
 
 <svelte:window on:hashchange="{onRouteChange}" />
 

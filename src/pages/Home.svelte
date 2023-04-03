@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { loggedInUser } from "../stores/Settings";
+    import { loggedInUser } from "../stores/User";
 </script>
 
 <h1>Home</h1>

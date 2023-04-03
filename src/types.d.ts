@@ -11,3 +11,9 @@ export type LoggedInUser = {
     email: string;
     token: string;
 };
+
+export type SiteSettings = {
+    colorScheme: string = "light" | "dark";
+    language: string = "en" | "fil" | "ja";
+    fontSize: string = "small" | "medium" | "large";
+};
