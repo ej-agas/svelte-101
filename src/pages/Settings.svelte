@@ -1,5 +1,6 @@
 <script lang="ts">
     import settings from "../stores/Settings";
+    import { direction } from "../stores/Direction";
 </script>
 
 <button
@@ -19,6 +20,7 @@
 {$settings.colorScheme}
 <br />
 {$settings.language}
+{$direction}
 <br />
 <label for="colorScheme">
     <input
@@ -39,3 +41,8 @@
         bind:group="{$settings.colorScheme}"
     /> Light
 </label>
+
+<select bind:value="{$settings.language}">
+    <option value="en">English</option>
+    <option value="ar">arabic</option>
+</select>
