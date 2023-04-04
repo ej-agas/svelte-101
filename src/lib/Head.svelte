@@ -1,5 +1,5 @@
 <script>
-    import { settings } from "../stores/Settings";
+    import settings from "../stores/Settings";
 </script>
 
 <svelte:head>

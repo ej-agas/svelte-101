@@ -1,14 +1,25 @@
 <script lang="ts">
-    import { settings } from "../stores/Settings";
+    import settings from "../stores/Settings";
 </script>
 
 <button
     on:click="{() => {
-        $settings.colorScheme =
-            $settings.colorScheme === 'dark' ? 'light' : 'dark';
+        settings.toggleColorScheme();
     }}">Toggle Color Scheme</button
 >
 
+<button
+    on:click="{() => {
+        settings.updateSetting('language', Math.random());
+    }}">Update Language</button
+>
+
+<button on:click="{() => settings.reset()}">Reset</button>
+<br />
+{$settings.colorScheme}
+<br />
+{$settings.language}
+<br />
 <label for="colorScheme">
     <input
         type="radio"
