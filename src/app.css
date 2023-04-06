@@ -6,5 +6,10 @@
 
 body {
   background-color: var(--backgroundColor);
-  color: var(--textColor)
+  color: var(--textColor);
+  font-family: var(--font-family);
+}
+
+* {
+  box-sizing: border-box;
 }

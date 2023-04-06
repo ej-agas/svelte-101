@@ -1,21 +1,3 @@
-// import type { ColorScheme, FontSize } from "./stores/Constants";
-
-export enum ColorScheme {
-    Light = "light",
-    Dark = "dark",
-}
-
-export enum FontSize {
-    Small = "small",
-    Medium = "medium",
-    Large = "large",
-}
-
-export enum SiteDirection {
-    LeftToRight = "ltr",
-    RightToLeft = "rtl",
-}
-
 export type Todo = {
     id: string;
     text: string;
@@ -34,4 +16,14 @@ export type SiteSettings = {
     colorScheme: ColorScheme;
     language: string;
     fontSize: FontSize;
+};
+
+export type ColorScheme = "light" | "dark";
+
+export type FontSize = "small" | "medium" | "large";
+
+export type SiteDirection = "ltr" | "rtl";
+
+type FormErrors = {
+    [key: string]: string;
 };

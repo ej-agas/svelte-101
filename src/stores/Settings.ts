@@ -1,22 +1,10 @@
-// import { ColorScheme, FontSize } from "src/stores/Constants";
-import type { SiteSettings } from "src/types";
+import type { ColorScheme, FontSize, SiteSettings } from "src/types";
 import { writable } from "svelte/store";
 
-enum ColorScheme {
-    Light = "light",
-    Dark = "dark",
-}
-
-enum FontSize {
-    Small = "small",
-    Medium = "medium",
-    Large = "large",
-}
-
 const defaults = {
-    colorScheme: ColorScheme.Light,
+    colorScheme: "light" as ColorScheme,
     language: "en",
-    fontSize: FontSize.Medium,
+    fontSize: "medium" as FontSize,
 };
 
 function createSettingsStore() {
@@ -33,9 +21,7 @@ function createSettingsStore() {
             update((settings) => ({
                 ...settings,
                 colorScheme:
-                    settings.colorScheme === ColorScheme.Light
-                        ? ColorScheme.Dark
-                        : ColorScheme.Light,
+                    settings.colorScheme === "light" ? "dark" : "light",
             }));
         },
         reset: () => set({ ...defaults }),

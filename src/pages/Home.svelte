@@ -1,24 +1,11 @@
 <script lang="ts">
-    import { loggedInUser } from "../stores/User";
-    import { location } from "../stores/Location";
+    import Button from "../lib/Button.svelte";
+    import { Field, Form } from "../lib/Form";
 </script>
 
-<h1>Home</h1>
-
-<h3>
-    Name: {$loggedInUser.firstName}
-    {$loggedInUser.middleName}
-    {$loggedInUser.lastName}
-</h3>
-
-<h3>Email: {$loggedInUser.email}</h3>
-
-<h3>Token: {$loggedInUser.token}</h3>
-
-{#if $location && !$location.error}
-    {$location.latitude}, {$location.longitude}
-{/if}
-
-{#if $location && $location.error}
-    {$location.error.message}
-{/if}
+<Form on:submit="{() => {}}">
+    <Field name="username" label="Username" />
+    <Field name="email" label="Email" type="email" />
+    <Field name="password" label="Password" type="password" />
+    <Button type="submit">Submit</Button>
+</Form>

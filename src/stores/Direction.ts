@@ -1,11 +1,6 @@
-import type { SiteSettings } from "src/types";
+import type { SiteDirection, SiteSettings } from "src/types";
 import { derived } from "svelte/store";
 import settings from "./Settings";
-
-enum SiteDirection {
-    LeftToRight = "ltr",
-    RightToLeft = "rtl",
-}
 
 function callback(
     settings: SiteSettings,
@@ -13,11 +8,11 @@ function callback(
 ): () => void {
     const timer = setTimeout(() => {
         if (settings.language === "ar") {
-            set(SiteDirection.RightToLeft);
+            set("rtl");
             return;
         }
 
-        set(SiteDirection.LeftToRight);
+        set("ltr");
     }, 1000);
 
     return () => {
@@ -25,4 +20,4 @@ function callback(
     };
 }
 
-export const direction = derived(settings, callback, SiteDirection.LeftToRight);
+export const direction = derived(settings, callback, "ltr");
