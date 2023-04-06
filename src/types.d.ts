@@ -27,3 +27,8 @@ export type SiteDirection = "ltr" | "rtl";
 type FormErrors = {
     [key: string]: string;
 };
+
+export type FormContext = {
+    values: Record<string, any>;
+    errors: Record<string, string>;
+};

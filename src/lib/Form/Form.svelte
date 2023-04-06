@@ -1,11 +1,24 @@
 <script lang="ts">
-    import { setContext } from "svelte";
+    import { setContext, createEventDispatcher } from "svelte";
+    import { writable } from "svelte/store";
+    import formKey from "./form-key";
+    import type { FormContext } from "src/types";
+
+    const dispatch = createEventDispatcher();
 
     export let initialValues = {};
+    const form = writable<FormContext>({ values: initialValues, errors: {} });
 
-    setContext("form", { values: initialValues, errors: {} });
+    setContext(formKey, form);
 </script>
 
-<form>
+<pre>
+    {JSON.stringify($form, null, 2)}
+</pre>
+<form
+    on:submit|preventDefault="{() => {
+        dispatch('submit', $form.values);
+    }}"
+>
     <slot />
 </form>
