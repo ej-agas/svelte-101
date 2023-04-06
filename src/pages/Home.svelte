@@ -3,7 +3,10 @@
     import { Field, Form } from "../lib/Form";
 </script>
 
-<Form on:submit="{() => {}}">
+<Form
+    on:submit="{() => {}}"
+    initialValues="{{ username: 'Test', email: 'test@test.com' }}"
+>
     <Field name="username" label="Username" />
     <Field name="email" label="Email" type="email" />
     <Field name="password" label="Password" type="password" />
