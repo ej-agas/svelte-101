@@ -33,3 +33,12 @@ export type FormContext = {
     errors: Record<string, string>;
     showErrors: boolean;
 };
+
+export type Coordinates = {
+    latitude: number;
+    longitude: number;
+};
+
+export type MapMarkers = {
+    [key: string]: Coordinates;
+};

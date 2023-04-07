@@ -1,32 +1,28 @@
 <script lang="ts">
+    import { location } from "../stores/Location";
+    import Map from "../lib/Map/Map.svelte";
+    import Marker from "../lib/Map/Marker.svelte";
+    import type { Coordinates } from "src/types";
+    import Form from "../lib/Form/Form.svelte";
+    import Field from "../lib/Form/Field.svelte";
     import Button from "../lib/Button.svelte";
-    import { Field, Form } from "../lib/Form";
-    import { Required, Email } from "../validation/validation";
 
-    function handleSubmit(e: CustomEvent) {
-        console.log(e.detail);
-    }
+    let initialCoordinates: Coordinates = {
+        latitude: 14.5995,
+        longitude: 120.9842,
+    };
 </script>
 
-<Form
-    on:submit="{handleSubmit}"
-    initialValues="{{ username: 'test-user', email: 'user@company.com' }}"
-    let:hasErrors
->
-    <Field name="username" label="Username" validate="{Required}" />
-    <Field
-        name="email"
-        label="Email"
-        type="text"
-        validate="{(value, label) => {
-            return Email(value, label) || Required(value, label);
-        }}"
-    />
-    <Field
-        name="password"
-        label="Password"
-        type="password"
-        validate="{Required}"
-    />
-    <Button type="submit" disabled="{hasErrors}">Submit</Button>
-</Form>
+{#if $location}
+    <Map center="{$location}">
+        <Marker coordinates="{{ latitude: 14.5995, longitude: 120.9842 }}" />
+    </Map>
+    <h1>Latitude: {$location.latitude}</h1>
+    <h1>Longitude: {$location.longitude}</h1>
+{:else}
+    <Map center="{initialCoordinates}">
+        <Marker coordinates="{{ latitude: 14.5995, longitude: 120.9842 }}" />
+    </Map>
+    <h1>Latitude: {initialCoordinates.latitude}</h1>
+    <h1>Longitude: {initialCoordinates.longitude}</h1>
+{/if}

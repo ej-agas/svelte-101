@@ -1,6 +1,7 @@
+import type { Coordinates } from "src/types";
 import { readable, type Subscriber } from "svelte/store";
 
-function getLocation(set: Subscriber<object>) {
+function getLocation(set: Subscriber<Coordinates>) {
     let watchId: number;
     if (navigator.geolocation && navigator.geolocation.watchPosition) {
         watchId = navigator.geolocation.watchPosition(
@@ -9,7 +10,7 @@ function getLocation(set: Subscriber<object>) {
                 set({ latitude, longitude });
             },
             (error: GeolocationPositionError) => {
-                set({ error });
+                console.error(error);
             }
         );
     }
@@ -22,4 +23,4 @@ function getLocation(set: Subscriber<object>) {
     };
 }
 
-export const location = readable(null, getLocation);
+export const location = readable<Coordinates>(null, getLocation);
