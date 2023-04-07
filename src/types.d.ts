@@ -31,4 +31,5 @@ type FormErrors = {
 export type FormContext = {
     values: Record<string, any>;
     errors: Record<string, string>;
+    showErrors: boolean;
 };

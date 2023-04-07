@@ -1,6 +1,7 @@
 <script lang="ts">
     import Button from "../lib/Button.svelte";
     import { Field, Form } from "../lib/Form";
+    import { Required, Email } from "../validation/validation";
 
     function handleSubmit(e: CustomEvent) {
         console.log(e.detail);
@@ -9,10 +10,23 @@
 
 <Form
     on:submit="{handleSubmit}"
-    initialValues="{{ username: 'Test', email: 'test@test.com' }}"
+    initialValues="{{ username: 'test-user', email: 'user@company.com' }}"
+    let:hasErrors
 >
-    <Field name="username" label="Username" />
-    <Field name="email" label="Email" type="email" />
-    <Field name="password" label="Password" type="password" />
-    <Button type="submit">Submit</Button>
+    <Field name="username" label="Username" validate="{Required}" />
+    <Field
+        name="email"
+        label="Email"
+        type="text"
+        validate="{(value, label) => {
+            return Email(value, label) || Required(value, label);
+        }}"
+    />
+    <Field
+        name="password"
+        label="Password"
+        type="password"
+        validate="{Required}"
+    />
+    <Button type="submit" disabled="{hasErrors}">Submit</Button>
 </Form>

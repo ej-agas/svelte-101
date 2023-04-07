@@ -61,10 +61,10 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
-        &:hover {
+        &:not(:disabled):hover {
             background-color: variables.$buttonColorHover;
         }
-        &:active {
+        &:not(:disabled):active {
             background-color: variables.$buttonColorActive;
         }
         &.size-sm {
